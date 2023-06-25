@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.valentinilk.shimmer.shimmer
 import it.vfsfitvnm.compose.persist.persist
 import it.vfsfitvnm.innertube.Innertube
@@ -92,7 +93,7 @@ fun PlaylistSongList(
 
     if (isImportingPlaylist) {
         TextFieldDialog(
-            hintText = "Enter the playlist name",
+            hintText = stringResource(id = R.string.playlist_name),
             initialTextInput = playlistPage?.title ?: "",
             onDismiss = { isImportingPlaylist = false },
             onDone = { text ->
@@ -123,14 +124,15 @@ fun PlaylistSongList(
                     .shimmer()
             )
         } else {
-            Header(title = playlistPage?.title ?: "Unknown") {
+            Header(title = playlistPage?.title ?: stringResource(id = R.string.unknown)) {
                 SecondaryTextButton(
-                    text = "Enqueue",
+                    text = stringResource(id = R.string.enqueue),
                     enabled = playlistPage?.songsPage?.items?.isNotEmpty() == true,
                     onClick = {
-                        playlistPage?.songsPage?.items?.map(Innertube.SongItem::asMediaItem)?.let { mediaItems ->
-                            binder?.player?.enqueue(mediaItems)
-                        }
+                        playlistPage?.songsPage?.items?.map(Innertube.SongItem::asMediaItem)
+                            ?.let { mediaItems ->
+                                binder?.player?.enqueue(mediaItems)
+                            }
                     }
                 )
 
@@ -149,7 +151,8 @@ fun PlaylistSongList(
                     icon = R.drawable.share_social,
                     color = colorPalette.text,
                     onClick = {
-                        (playlistPage?.url ?: "https://music.youtube.com/playlist?list=${browseId.removePrefix("VL")}").let { url ->
+                        (playlistPage?.url
+                            ?: "https://music.youtube.com/playlist?list=${browseId.removePrefix("VL")}").let { url ->
                             val sendIntent = Intent().apply {
                                 action = Intent.ACTION_SEND
                                 type = "text/plain"
@@ -164,7 +167,8 @@ fun PlaylistSongList(
         }
     }
 
-    val thumbnailContent = adaptiveThumbnailContent(playlistPage == null, playlistPage?.thumbnail?.url)
+    val thumbnailContent =
+        adaptiveThumbnailContent(playlistPage == null, playlistPage?.thumbnail?.url)
 
     val lazyListState = rememberLazyListState()
 
@@ -173,7 +177,7 @@ fun PlaylistSongList(
             LazyColumn(
                 state = lazyListState,
                 contentPadding = LocalPlayerAwareWindowInsets.current
-                .only(WindowInsetsSides.Vertical + WindowInsetsSides.End).asPaddingValues(),
+                    .only(WindowInsetsSides.Vertical + WindowInsetsSides.End).asPaddingValues(),
                 modifier = Modifier
                     .background(colorPalette.background0)
                     .fillMaxSize()
@@ -204,10 +208,11 @@ fun PlaylistSongList(
                                     }
                                 },
                                 onClick = {
-                                    playlistPage?.songsPage?.items?.map(Innertube.SongItem::asMediaItem)?.let { mediaItems ->
-                                        binder?.stopRadio()
-                                        binder?.player?.forcePlayAtIndex(mediaItems, index)
-                                    }
+                                    playlistPage?.songsPage?.items?.map(Innertube.SongItem::asMediaItem)
+                                        ?.let { mediaItems ->
+                                            binder?.stopRadio()
+                                            binder?.player?.forcePlayAtIndex(mediaItems, index)
+                                        }
                                 }
                             )
                     )

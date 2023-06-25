@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.valentinilk.shimmer.shimmer
 import it.vfsfitvnm.compose.persist.PersistMapCleanup
@@ -123,7 +124,7 @@ fun ArtistScreen(browseId: String) {
                         val (colorPalette) = LocalAppearance.current
                         val context = LocalContext.current
 
-                        Header(title = artist?.name ?: "Unknown") {
+                        Header(title = artist?.name ?: stringResource(id = R.string.unknown)) {
                             textButton?.invoke()
 
                             Spacer(

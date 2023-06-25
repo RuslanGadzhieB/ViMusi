@@ -20,8 +20,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import it.vfsfitvnm.vimusic.Database
 import it.vfsfitvnm.vimusic.LocalPlayerAwareWindowInsets
+import it.vfsfitvnm.vimusic.R
 import it.vfsfitvnm.vimusic.internal
 import it.vfsfitvnm.vimusic.path
 import it.vfsfitvnm.vimusic.query
@@ -94,16 +96,17 @@ fun DatabaseSettings() {
                     .asPaddingValues()
             )
     ) {
-        Header(title = "Database")
+        Header(title = stringResource(id = R.string.database))
 
-        SettingsEntryGroupText(title = "CLEANUP")
+        SettingsEntryGroupText(title = stringResource(id = R.string.cleanup))
 
         SettingsEntry(
-            title = "Reset quick picks",
+            title = stringResource(id = R.string.reset_quick_picks),
             text = if (eventsCount > 0) {
-                "Delete $eventsCount playback events"
+                stringResource(id = R.string.delete_playback_events)
             } else {
-                "Quick picks are cleared"
+                stringResource(id = R.string.pick_cleared)
+
             },
             isEnabled = eventsCount > 0,
             onClick = { query(Database::clearEvents) }
@@ -111,13 +114,16 @@ fun DatabaseSettings() {
 
         SettingsGroupSpacer()
 
-        SettingsEntryGroupText(title = "BACKUP")
+        SettingsEntryGroupText(
+            title = stringResource(id = R.string.backup)
+
+        )
 
         SettingsDescription(text = "Personal preferences (i.e. the theme mode) and the cache are excluded.")
 
         SettingsEntry(
-            title = "Backup",
-            text = "Export the database to the external storage",
+            title = stringResource(id = R.string.Backup),
+            text = stringResource(id = R.string.export_database),
             onClick = {
                 @SuppressLint("SimpleDateFormat")
                 val dateFormat = SimpleDateFormat("yyyyMMddHHmmss")
@@ -132,13 +138,13 @@ fun DatabaseSettings() {
 
         SettingsGroupSpacer()
 
-        SettingsEntryGroupText(title = "RESTORE")
+        SettingsEntryGroupText(title = stringResource(id = R.string.restore))
 
-        ImportantSettingsDescription(text = "Existing data will be overwritten.\n${context.applicationInfo.nonLocalizedLabel} will automatically close itself after restoring the database.")
+        ImportantSettingsDescription(text = stringResource(id = R.string.existing_data))
 
         SettingsEntry(
-            title = "Restore",
-            text = "Import the database from the external storage",
+            title = stringResource(id = R.string.Restore),
+            text = stringResource(id = R.string.import_database),
             onClick = {
                 try {
                     restoreLauncher.launch(

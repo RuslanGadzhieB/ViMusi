@@ -44,6 +44,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.C
@@ -169,7 +170,7 @@ fun Lyrics(
 
         if (isEditing) {
             TextFieldDialog(
-                hintText = "Enter the lyrics",
+                hintText = stringResource(id = R.string.lyrics),
                 initialTextInput = text ?: "",
                 singleLine = false,
                 maxLines = 10,
@@ -345,7 +346,7 @@ fun Lyrics(
 
                                     MenuEntry(
                                         icon = R.drawable.pencil,
-                                        text = "Edit lyrics",
+                                        text = stringResource(id = R.string.edit_lyrics),
                                         onClick = {
                                             menuState.hide()
                                             isEditing = true
@@ -354,7 +355,7 @@ fun Lyrics(
 
                                     MenuEntry(
                                         icon = R.drawable.search,
-                                        text = "Search lyrics online",
+                                        text = stringResource(id = R.string.search_lyrics_online),
                                         onClick = {
                                             menuState.hide()
                                             val mediaMetadata = mediaMetadataProvider()

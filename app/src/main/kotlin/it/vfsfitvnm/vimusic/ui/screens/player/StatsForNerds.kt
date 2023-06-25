@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.datasource.cache.Cache
 import androidx.media3.datasource.cache.CacheSpan
@@ -32,6 +33,7 @@ import it.vfsfitvnm.innertube.models.bodies.PlayerBody
 import it.vfsfitvnm.innertube.requests.player
 import it.vfsfitvnm.vimusic.Database
 import it.vfsfitvnm.vimusic.LocalPlayerServiceBinder
+import it.vfsfitvnm.vimusic.R
 import it.vfsfitvnm.vimusic.models.Format
 import it.vfsfitvnm.vimusic.ui.styling.LocalAppearance
 import it.vfsfitvnm.vimusic.ui.styling.onOverlay
@@ -72,27 +74,29 @@ fun StatsForNerds(
         LaunchedEffect(mediaId) {
             Database.format(mediaId).distinctUntilChanged().collectLatest { currentFormat ->
                 if (currentFormat?.itag == null) {
-                    binder.player.currentMediaItem?.takeIf { it.mediaId == mediaId }?.let { mediaItem ->
-                        withContext(Dispatchers.IO) {
-                            delay(2000)
-                            Innertube.player(PlayerBody(videoId = mediaId))?.onSuccess { response ->
-                                response.streamingData?.highestQualityFormat?.let { format ->
-                                    Database.insert(mediaItem)
-                                    Database.insert(
-                                        Format(
-                                            songId = mediaId,
-                                            itag = format.itag,
-                                            mimeType = format.mimeType,
-                                            bitrate = format.bitrate,
-                                            loudnessDb = response.playerConfig?.audioConfig?.normalizedLoudnessDb,
-                                            contentLength = format.contentLength,
-                                            lastModified = format.lastModified
-                                        )
-                                    )
-                                }
+                    binder.player.currentMediaItem?.takeIf { it.mediaId == mediaId }
+                        ?.let { mediaItem ->
+                            withContext(Dispatchers.IO) {
+                                delay(2000)
+                                Innertube.player(PlayerBody(videoId = mediaId))
+                                    ?.onSuccess { response ->
+                                        response.streamingData?.highestQualityFormat?.let { format ->
+                                            Database.insert(mediaItem)
+                                            Database.insert(
+                                                Format(
+                                                    songId = mediaId,
+                                                    itag = format.itag,
+                                                    mimeType = format.mimeType,
+                                                    bitrate = format.bitrate,
+                                                    loudnessDb = response.playerConfig?.audioConfig?.normalizedLoudnessDb,
+                                                    contentLength = format.contentLength,
+                                                    lastModified = format.lastModified
+                                                )
+                                            )
+                                        }
+                                    }
                             }
                         }
-                    }
                 } else {
                     format = currentFormat
                 }
@@ -140,27 +144,27 @@ fun StatsForNerds(
             ) {
                 Column(horizontalAlignment = Alignment.End) {
                     BasicText(
-                        text = "Id",
+                        text = stringResource(id = R.string.id),
                         style = typography.xs.medium.color(colorPalette.onOverlay)
                     )
                     BasicText(
-                        text = "Itag",
+                        text = stringResource(id = R.string.itag),
                         style = typography.xs.medium.color(colorPalette.onOverlay)
                     )
                     BasicText(
-                        text = "Bitrate",
+                        text = stringResource(id = R.string.bitrate),
                         style = typography.xs.medium.color(colorPalette.onOverlay)
                     )
                     BasicText(
-                        text = "Size",
+                        text = stringResource(id = R.string.size),
                         style = typography.xs.medium.color(colorPalette.onOverlay)
                     )
                     BasicText(
-                        text = "Cached",
+                        text = stringResource(id = R.string.cached),
                         style = typography.xs.medium.color(colorPalette.onOverlay)
                     )
                     BasicText(
-                        text = "Loudness",
+                        text = stringResource(id = R.string.loudness),
                         style = typography.xs.medium.color(colorPalette.onOverlay)
                     )
                 }
