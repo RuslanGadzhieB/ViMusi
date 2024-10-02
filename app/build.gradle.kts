@@ -1,16 +1,17 @@
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
-    compileSdk = 33
+    compileSdk = libs.versions.androidSdk.compile.get().toInt()
 
     defaultConfig {
         applicationId = "it.vfsfitvnm.vimusic"
-        minSdk = 21
-        targetSdk = 33
+        minSdk = libs.versions.androidSdk.min.get().toInt()
+        targetSdk = libs.versions.androidSdk.target.get().toInt()
         versionCode = 20
         versionName = "0.5.4"
     }
@@ -63,10 +64,8 @@ android {
     }
 }
 
-kapt {
-    arguments {
-        arg("room.schemaLocation", "$projectDir/schemas")
-    }
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 dependencies {
@@ -74,20 +73,25 @@ dependencies {
     implementation(projects.composeRouting)
     implementation(projects.composeReordering)
 
-    implementation(libs.compose.activity)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.activity.compose)
     implementation(libs.compose.foundation)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.util)
-    implementation(libs.compose.ripple)
+    implementation(libs.compose.ui.graphics)
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.compose.runtime)
+    implementation(libs.material3)
     implementation(libs.compose.shimmer)
-    implementation(libs.compose.coil)
+    implementation(libs.coil)
 
     implementation(libs.palette)
 
     implementation(libs.exoplayer)
 
     implementation(libs.room)
-    kapt(libs.room.compiler)
+    ksp(libs.room.compiler)
 
     implementation(projects.innertube)
     implementation(projects.kugou)
